@@ -6,7 +6,7 @@ RUN set -eux; \
 	if command -v a2enmod; then \
 		a2enmod rewrite; \
 	fi
-
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 # Install packages 
 RUN	apt-get update; \
 	apt-get install -y --no-install-recommends \
@@ -160,7 +160,8 @@ RUN mkdir /opt/drupal
 WORKDIR /opt/drupal
 
 # Copy entrypoint to image
-COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /opt/drupal/entrypoint.sh
+RUN chmod +x /opt/drupal/entrypoint.sh
 
 # Copy Drupal settings from context to image 
 COPY settings.php /settings.php
